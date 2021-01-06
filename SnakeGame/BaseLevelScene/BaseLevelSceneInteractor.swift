@@ -8,13 +8,15 @@
 import Foundation
 
 protocol BaseLevelSceneInteractorProtocol {
+	var output: BaseLevelSceneInteractorOutput? { get set }
+}
+
+protocol BaseLevelSceneInteractorOutput: AnyObject {
 
 }
 
-protocol BaseLevelSceneInteractorOutput {
+final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
+	weak var output: BaseLevelSceneInteractorOutput?
 
-}
-
-final class BaseLevelSceneInteractor {
 	
 }

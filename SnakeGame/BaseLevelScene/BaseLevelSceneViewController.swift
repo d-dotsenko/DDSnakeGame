@@ -17,6 +17,10 @@ final class BaseLevelSceneViewController: UIViewController, BaseLevelSceneViewCo
 
 }
 
+extension BaseLevelSceneViewController: BaseLevelSceneInteractorOutput {
+
+}
+
 extension BaseLevelSceneViewController: BaseLevelSceneViewControllerInput {
 
 }

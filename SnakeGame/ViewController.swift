@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  SnakeGame
 //
-//  Created by Dotsenko  on 03.01.2021.
+//  Created by Dotsenko Dmitriy on 03.01.2021.
 //
 
 import UIKit

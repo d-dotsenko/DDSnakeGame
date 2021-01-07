@@ -14,6 +14,16 @@ class ViewController: UIViewController {
 		// Do any additional setup after loading the view.
 	}
 
+	private var baseLevelViewController: UIViewController {
+		BaseLevelSceneConfigurator().configuredModule()
+	}
+
+	@IBAction func startGame(_ sender: Any) {
+		let aViewController = baseLevelViewController
+		aViewController.modalPresentationStyle = .fullScreen
+//		aViewController.isModalInPresentation = true
+		present(aViewController, animated: true, completion: nil)
+	}
 
 }
 

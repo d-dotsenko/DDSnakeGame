@@ -24,6 +24,8 @@ struct Snake {
 // MARK: Public
 
 	public var way: Way
+	public var head: CGPoint = .zero
+	public var tail: CGPoint = .zero
 
 	public var points: [CGPoint] {
 		set {
@@ -46,8 +48,6 @@ struct Snake {
 
 // MARK: Private
 
-	private var head: CGPoint = .zero
-	private var tail: CGPoint = .zero
 
 	private var _points = [CGPoint]()
 

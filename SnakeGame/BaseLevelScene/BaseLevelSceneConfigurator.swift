@@ -10,8 +10,16 @@ import UIKit
 final class BaseLevelSceneConfigurator {
 
 	func configuredModule() -> UIViewController & BaseLevelSceneViewControllerProtocol {
+
+		let snakePoints = [
+			CGPoint(x: 10, y: 10),
+			CGPoint(x: 11, y: 10),
+			CGPoint(x: 12, y: 10),
+			CGPoint(x: 13, y: 10),
+		]
+
 		let viewController = BaseLevelSceneViewController()
-		let interactor = BaseLevelSceneInteractor()
+		let interactor = BaseLevelSceneInteractor(startPoints: snakePoints)
 		let router = BaseLevelSceneRouter()
 
 		router.parentViewController = viewController

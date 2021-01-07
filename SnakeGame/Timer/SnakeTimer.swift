@@ -40,7 +40,7 @@ class SnakeTimer {
 	public var block: ((Timer) -> ())?
 
 	public func start() {
-		timer = Timer.scheduledTimer(withTimeInterval: SnakeTimer.period, repeats: true) { (aTimer) in
+		timer = Timer.scheduledTimer(withTimeInterval: _period, repeats: true) { (aTimer) in
 			if let block = self.block {
 				block(aTimer)
 			}
@@ -48,6 +48,7 @@ class SnakeTimer {
 	}
 
 	public func stop() {
+		_period = SnakeTimer.period
 		timer?.invalidate()
 	}
 

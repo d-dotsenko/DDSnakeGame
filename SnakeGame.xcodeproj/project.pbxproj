@@ -21,6 +21,8 @@
 		2F0CABA325A63F1C009417AB /* Snake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0CABA225A63F1C009417AB /* Snake.swift */; };
 		2F0CABA725A64285009417AB /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0CABA625A64285009417AB /* Food.swift */; };
 		2F0CABAB25A64392009417AB /* SnakeTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0CABAA25A64392009417AB /* SnakeTimer.swift */; };
+		2F0CABAF25A71C6C009417AB /* Coins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0CABAE25A71C6C009417AB /* Coins.swift */; };
+		2F0CABB325A75267009417AB /* FoodHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0CABB225A75267009417AB /* FoodHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		2F0CABA225A63F1C009417AB /* Snake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snake.swift; sourceTree = "<group>"; };
 		2F0CABA625A64285009417AB /* Food.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
 		2F0CABAA25A64392009417AB /* SnakeTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeTimer.swift; sourceTree = "<group>"; };
+		2F0CABAE25A71C6C009417AB /* Coins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coins.swift; sourceTree = "<group>"; };
+		2F0CABB225A75267009417AB /* FoodHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,7 @@
 		2F0CAB7725A1DBF6009417AB /* SnakeGame */ = {
 			isa = PBXGroup;
 			children = (
+				2F0CABAD25A71C56009417AB /* Coins */,
 				2F0CABA925A64376009417AB /* Timer */,
 				2F0CABA525A6426A009417AB /* Characters */,
 				2F0CABA125A63EFA009417AB /* Snake */,
@@ -111,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				2F0CABA625A64285009417AB /* Food.swift */,
+				2F0CABB225A75267009417AB /* FoodHelper.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -121,6 +127,14 @@
 				2F0CABAA25A64392009417AB /* SnakeTimer.swift */,
 			);
 			path = Timer;
+			sourceTree = "<group>";
+		};
+		2F0CABAD25A71C56009417AB /* Coins */ = {
+			isa = PBXGroup;
+			children = (
+				2F0CABAE25A71C6C009417AB /* Coins.swift */,
+			);
+			path = Coins;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,9 +208,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F0CAB7D25A1DBF6009417AB /* ViewController.swift in Sources */,
+				2F0CABAF25A71C6C009417AB /* Coins.swift in Sources */,
 				2F0CAB9725A61751009417AB /* BaseLevelSceneRouter.swift in Sources */,
 				2F0CAB7925A1DBF6009417AB /* AppDelegate.swift in Sources */,
 				2F0CAB9025A61732009417AB /* BaseLevelSceneConfigurator.swift in Sources */,
+				2F0CABB325A75267009417AB /* FoodHelper.swift in Sources */,
 				2F0CAB7B25A1DBF6009417AB /* SceneDelegate.swift in Sources */,
 				2F0CAB9425A61746009417AB /* BaseLevelSceneInteractor.swift in Sources */,
 				2F0CABAB25A64392009417AB /* SnakeTimer.swift in Sources */,

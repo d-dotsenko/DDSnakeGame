@@ -11,18 +11,21 @@ protocol BaseLevelSceneInteractorProtocol {
 	var output: BaseLevelSceneInteractorOutput? { get set }
 
 	func start()
+	func lost()
 	func stop()
 	func changeDirection(way: Way)
 }
 
 protocol BaseLevelSceneInteractorOutput: AnyObject {
-	func stop()
+	func lost()
 	func updateSnake(points: [CGPoint], color: UIColor)
 	func updateFood(points: [CGPoint], color: UIColor)
+	func updateAnabolic(points: [CGPoint], color: UIColor)
 }
 
 enum Constants {
 	static let lines: Int = 20
+	static let anabolicProbabiliry: Int = 3
 }
 
 final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
@@ -36,25 +39,34 @@ final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
 		}
 	}
 
-// MARK: private
-
 	private var snake = Snake(way: .r)
-	private var food = [Food]()
+//	private var food = [Food]()
 	private let timer = SnakeTimer(period: 1)
+	private let foodHelper = FoodHelper()
 
 // MARK: public
 
 	public var startPoints: [CGPoint]
 
 	public func start() {
+		snake = Snake(way: .r)
 		snake.points = startPoints
-		addFood()
+		foodHelper.add(type: .normal)
+//		addFood()
 		showPosition()
 		timer.start()
 	}
 
 	public func stop() {
-		output?.stop()
+		timer.stop()
+		snake.points = []
+		foodHelper.clean()
+//		food = []
+//		timer.updateTimer(acceleration: .normal)
+	}
+
+	public func lost() {
+		output?.lost()
 		timer.stop()
 	}
 
@@ -87,19 +99,23 @@ final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
 
 	func showPosition() {
 		output?.updateSnake(points: snake.points, color: .green)
-		output?.updateFood(points: food.compactMap { $0.position }, color: .green)
+		output?.updateFood(points: foodHelper.foods.compactMap { $0.position }, color: .purple)
+		output?.updateAnabolic(points: foodHelper.anabolics.compactMap { $0.position }, color: .yellow)
 	}
 
 	func nextStep() {
 		let nextPos = nextPosition()
 
 		if isOutside(position: nextPos) {
-			stop()
+			lost()
 			return
 		} else if isEatHimself(position: nextPos) {
-			stop()
+			lost()
 			return
-		} else if !isEatFood(position: nextPos) {
+		} else if let aFood = foodHelper.isEatFood(position: nextPos) {
+			feed(aFood: aFood)
+			// eatCount += 1
+		} else {
 			move()
 		}
 
@@ -111,16 +127,26 @@ final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
 	}
 
 	func feed(aFood: Food) {
-		delFood(aFood: aFood)
-		addFood()
-		snake.growUp()
+		if aFood.type == .anabolic {
+			feedAnabolic(aFood: aFood)
+		} else {
+			feedFood(aFood: aFood)
+		}
+		tryAddAnabolic()
 	}
 
-	func addFood() {
-		let randRange: Range<Int> = 0..<Constants.lines
-		let position = CGPoint(x: Int.random(in: randRange), y: Int.random(in: randRange))
-		let aFood = Food(position: position)
-		self.food.append(aFood)
+	func feedFood(aFood: Food) {
+		foodHelper.del(aFood: aFood)
+		foodHelper.add(type: .normal)
+		snake.growUp()
+		timer.updateTimer(acceleration: .faster)
+	}
+
+	func feedAnabolic(aFood: Food) {
+		foodHelper.del(aFood: aFood)
+		snake.growUp()
+		snake.growUp()
+		timer.updateTimer(acceleration: .normal)
 	}
 
 	func nextPosition() -> CGPoint {
@@ -165,22 +191,10 @@ final class BaseLevelSceneInteractor: BaseLevelSceneInteractorProtocol {
 		return isEat
 	}
 
-	func isEatFood(position: CGPoint) -> Bool {
-		var isEat = false
-		food.forEach { (aFood) in
-			if aFood.position == position {
-				isEat = true
-				feed(aFood: aFood)
-//				eatCount += 1
-				return
-			}
-		}
-		return isEat
-	}
-
-	func delFood(aFood: Food) {
-		if let index = self.food.firstIndex(of: aFood) {
-			food.remove(at: index)
+	func tryAddAnabolic() {
+		let randRange: Range<Int> = 0..<Constants.anabolicProbabiliry
+		if Int.random(in: randRange) == 2 {
+			foodHelper.add(type: .anabolic)
 		}
 	}
 	

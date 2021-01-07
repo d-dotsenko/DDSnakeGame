@@ -17,8 +17,10 @@ final class BaseLevelSceneViewController: UIViewController, BaseLevelSceneViewCo
 
 	private var snakeViews = [UIView]()
 	private var foodViews = [UIView]()
+	private var anabolicsViews = [UIView]()
 
 	let gameView = UIView()
+	let restartButton = UIButton()
 
 	let lGr = UISwipeGestureRecognizer()
 	let rGr = UISwipeGestureRecognizer()
@@ -36,7 +38,7 @@ final class BaseLevelSceneViewController: UIViewController, BaseLevelSceneViewCo
 		NSLayoutConstraint.activate([
 			gameView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			gameView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-			gameView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -100),
+			gameView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20),
 			gameView.heightAnchor.constraint(equalTo: gameView.widthAnchor)
 		])
 
@@ -58,8 +60,38 @@ final class BaseLevelSceneViewController: UIViewController, BaseLevelSceneViewCo
 		gameView.setNeedsLayout()
 		gameView.layoutIfNeeded()
 
+		setupRestartButton()
+
 		interactor?.start()
 
+	}
+
+	func setupRestartButton() {
+		view.addSubview(restartButton)
+		restartButton.translatesAutoresizingMaskIntoConstraints = false
+		NSLayoutConstraint.activate([
+			restartButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			restartButton.topAnchor.constraint(equalTo: gameView.bottomAnchor, constant: 40),
+			restartButton.widthAnchor.constraint(equalToConstant: 100),
+			restartButton.heightAnchor.constraint(equalToConstant: 40)
+		])
+		restartButton.backgroundColor = .clear
+		restartButton.setTitle("Restart", for: .normal)
+		restartButton.setTitleColor(.black, for: .normal)
+		restartButton.addTarget(self, action: #selector(restartDidTap), for: .touchUpInside)
+	}
+
+	@objc func restartDidTap() {
+		interactor?.stop()
+
+		snakeViews.forEach { $0.removeFromSuperview() }
+		snakeViews = []
+		foodViews.forEach { $0.removeFromSuperview() }
+		foodViews = []
+		anabolicsViews.forEach { $0.removeFromSuperview() }
+		anabolicsViews = []
+		
+		interactor?.start()
 	}
 
 	@objc func swipe(gesture: UIGestureRecognizer) {
@@ -79,58 +111,6 @@ final class BaseLevelSceneViewController: UIViewController, BaseLevelSceneViewCo
 		}
 	}
 
-}
-
-extension BaseLevelSceneViewController: BaseLevelSceneInteractorOutput {
-
-// MARK: public
-
-	func stop() {
-		snakeViews.forEach { $0.backgroundColor = .red }
-	}
-	
-	func updateSnake(points: [CGPoint], color: UIColor) {
-		clearSnakeViews()
-		createSnakeViews(points: points, color: color)
-		showSnakeViews()
-	}
-
-	func updateFood(points: [CGPoint], color: UIColor) {
-		clearFoodViews()
-		createFoodViews(points: points, color: color)
-		showFoodViews()
-	}
-
-// MARK: private
-
-	private func clearSnakeViews() {
-		snakeViews.forEach { $0.removeFromSuperview() }
-		snakeViews = []
-	}
-
-	private func clearFoodViews() {
-		foodViews.forEach { $0.removeFromSuperview() }
-		foodViews = []
-	}
-
-	private func createSnakeViews(points: [CGPoint], color: UIColor) {
-		let aSnakeViews = createViews(points: points, color: color)
-		snakeViews.append(contentsOf: aSnakeViews)
-	}
-
-	private func createFoodViews(points: [CGPoint], color: UIColor) {
-		let aFoodViews = createViews(points: points, color: color)
-		foodViews.append(contentsOf: aFoodViews)
-	}
-
-	private func showSnakeViews() {
-		snakeViews.forEach { gameView.addSubview($0) }
-	}
-
-	private func showFoodViews() {
-		foodViews.forEach { gameView.addSubview($0) }
-	}
-
 	private func createViews(points: [CGPoint], color: UIColor) -> [UIView] {
 		var views = [UIView]()
 		let width = gameView.frame.size.width / CGFloat(Constants.lines)
@@ -145,13 +125,38 @@ extension BaseLevelSceneViewController: BaseLevelSceneInteractorOutput {
 		}
 		return views
 	}
-	
+
 }
 
-extension BaseLevelSceneViewController: UIAdaptivePresentationControllerDelegate {
-	func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-		return false
+extension BaseLevelSceneViewController: BaseLevelSceneInteractorOutput {
+
+// MARK: public
+
+	func lost() {
+		snakeViews.forEach { $0.backgroundColor = .red }
 	}
+	
+	func updateSnake(points: [CGPoint], color: UIColor) {
+		snakeViews.forEach { $0.removeFromSuperview() }
+		snakeViews = []
+		snakeViews.append(contentsOf: createViews(points: points, color: color))
+		snakeViews.forEach { gameView.addSubview($0) }
+	}
+
+	func updateFood(points: [CGPoint], color: UIColor) {
+		foodViews.forEach { $0.removeFromSuperview() }
+		foodViews = []
+		foodViews.append(contentsOf: createViews(points: points, color: color))
+		foodViews.forEach { gameView.addSubview($0) }
+	}
+
+	func updateAnabolic(points: [CGPoint], color: UIColor) {
+		anabolicsViews.forEach { $0.removeFromSuperview() }
+		anabolicsViews = []
+		anabolicsViews.append(contentsOf: createViews(points: points, color: color))
+		anabolicsViews.forEach { gameView.addSubview($0) }
+	}
+	
 }
 
 extension BaseLevelSceneViewController: BaseLevelSceneViewControllerInput {

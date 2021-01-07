@@ -21,9 +21,7 @@ class ViewController: UIViewController {
 	@IBAction func startGame(_ sender: Any) {
 		let aViewController = baseLevelViewController
 		aViewController.modalPresentationStyle = .fullScreen
-//		aViewController.isModalInPresentation = true
 		present(aViewController, animated: true, completion: nil)
 	}
-
 }
 
